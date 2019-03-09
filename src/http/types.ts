@@ -8,5 +8,5 @@ export interface HandlerResponse {
 }
 
 export interface RequestHandler {
-  (req: Request, res?: Response): Promise<HandlerResponse>;
+  (req: Request, res: Response): Promise<HandlerResponse>;
 }

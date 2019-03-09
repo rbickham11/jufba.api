@@ -10,11 +10,13 @@ import makeHandlerResponse from '../../http/make-handler-response';
 
 interface Dependencies {
   db: Knex
+  getGroupMemberList : Function
 }
 
 async function handleGetGroup(dependencies: Dependencies, req: Request) : Promise<HandlerResponse> {
   const {
     db,
+    getGroupMemberList,
   } = dependencies;
 
   const { params } = req;
@@ -28,7 +30,12 @@ async function handleGetGroup(dependencies: Dependencies, req: Request) : Promis
     throw new HTTPNotFoundError(`Group "${id}" does not exist`);
   }
 
-  return makeHandlerResponse({ body: matchingGroup });
+  const response = {
+    ...matchingGroup,
+    members: await getGroupMemberList(id),
+  }
+
+  return makeHandlerResponse({ body: response });
 }
 
 export default curry(handleGetGroup);

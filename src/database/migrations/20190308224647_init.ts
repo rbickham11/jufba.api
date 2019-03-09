@@ -75,6 +75,7 @@ export async function up(knex: Knex): Promise<any> {
         t.string('name');
         t.jsonb('structure');
         t.string('type').notNullable();
+        t.integer('state').notNullable().defaultTo(100);
 
         t.string('group_id')
           .references('id').inTable(TABLE_NAME_GROUP)

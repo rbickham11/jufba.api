@@ -7,7 +7,7 @@ import shortid from 'shortid';
 
 import { HandlerResponse } from '../../http/types';
 import getAccessToken from '../../helpers/parse-access-token';
-import { TABLE_NAME_USER, TABLE_NAME_GROUP_USER, TABLE_NAME_GROUP } from '../../database/config';
+import { TABLE_NAME_USER, TABLE_NAME_GROUP_USER, TABLE_NAME_GROUP, TABLE_NAME_PLAYER, TABLE_NAME_GAME } from '../../database/config';
 import makeHandlerResponse from '../../http/make-handler-response';
 import camelCaseKeys from '../../helpers/camel-case-keys';
 
@@ -35,7 +35,44 @@ async function handleGetUser(dependencies: Dependencies, req: Request) : Promise
       .where('user_id', existingUser.id)
       .map(camelCaseKeys);
 
-    return makeHandlerResponse({ body: { ...existingUser, groups: userGroupRows.map(row => pick(row, ['id', 'description', 'name', 'isAdmin'])) } });
+    const userPlayerGames = await db(TABLE_NAME_PLAYER)
+      .innerJoin(TABLE_NAME_GAME, `${TABLE_NAME_PLAYER}.game_id`, `${TABLE_NAME_GAME}.id`)
+      .select([
+        `${TABLE_NAME_PLAYER}.id as id`,
+        `${TABLE_NAME_PLAYER}.buy_in as buyIn`,
+        `${TABLE_NAME_PLAYER}.final_chip_count as finalChipCount`,
+        `${TABLE_NAME_PLAYER}.max_chips as maxChips`,
+        `${TABLE_NAME_PLAYER}.min_chips as minChips`,
+        `${TABLE_NAME_GAME}.id as gameId`,
+        `${TABLE_NAME_GAME}.date as gameDate`,
+        `${TABLE_NAME_GAME}.name as gameName`,
+        `${TABLE_NAME_GAME}.structure as gameStructure`,
+        `${TABLE_NAME_GAME}.type as gameType`,
+        `${TABLE_NAME_GAME}.state as gameState`,
+        `${TABLE_NAME_GAME}.group_id as gameGroupId`
+      ])
+      .where('user_id', existingUser.id)
+      .map(camelCaseKeys);
+
+
+    const response = { 
+      ...existingUser, 
+      groups: userGroupRows.map(row => pick(row, ['id', 'description', 'name', 'isAdmin'])),
+      players: userPlayerGames.map(pg => ({
+        ...pick(pg, ['id', 'buyIn', 'finalChipCount', 'maxChips', 'minChips']),
+        game: {
+          id: pg.gameId,
+          date: pg.gameDate,
+          name: pg.gameName,
+          structure: pg.gameStructure,
+          type: pg.gameType,
+          state: pg.gameState,
+          groupId: pg.gameGroupId,
+        }
+      })),
+    };
+
+    return makeHandlerResponse({ body: response });
   }
 
   const accessToken = getAccessToken(req);
