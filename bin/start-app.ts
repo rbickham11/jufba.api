@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { Router, Request, Response, NextFunction } from 'express';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -100,6 +100,18 @@ const gameHandlers = {
 app.use('/games', expandUser, initializeGameRouter(Router(), gameHandlers));
 app.use('/groups', expandUser, initializeGroupRouter(Router(), groupHandlers));
 app.use('/user', initializeUserRouter(Router(), { get: handleGetUser }));
+
+// Default error middleware to catch uncaught, non-rejection errors
+app.use((err, req: Request, res: Response, next: NextFunction) => {
+  if (err.name === 'UnauthorizedError') { 
+    // Catch error from express-jwt middleware
+    res.status(401).json({ message: 'Invalid or missing authorization token' });
+
+    return;
+  }
+
+  res.status(500).json({ message: err.message });
+});
 
 const HTTP_PORT = process.env.HTTP_PORT || 4000;
 
