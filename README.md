@@ -4,7 +4,7 @@ Tracking games and things
 
 ## Authentication
 
-Each route in this API verifies an access token from Auth0. This access should be sent as a Bearer token in the Authorization header.
+Each route in this API verifies an access token from Auth0. This access token should be sent as a Bearer token in the Authorization header.
 
 `Authorization: Bearer {token}`
 
