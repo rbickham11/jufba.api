@@ -41,7 +41,7 @@ async function handleCreateGroup(dependencies: Dependencies, req: Request, res: 
       is_admin: true,
     })
 
-  return makeHandlerResponse({ body: { ...insertResult, admins: [user] } });
+  return makeHandlerResponse({ body: { ...insertResult, members: [user] } });
 }
 
 export default curry(handleCreateGroup);

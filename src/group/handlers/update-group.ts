@@ -10,13 +10,15 @@ import { HTTPForbiddenError } from '../../http/errors';
 
 interface Dependencies {
   db: Knex,
-  checkIsGroupAdmin: Function
+  checkIsGroupAdmin: Function,
+  getGroupMemberList : Function,
 }
 
 async function handleUpdateGroup(dependencies: Dependencies, req: Request, res: Response) : Promise<HandlerResponse> {
   const {
     db,
     checkIsGroupAdmin,
+    getGroupMemberList,
   } = dependencies;
 
   const { body, params } = req;
@@ -42,9 +44,10 @@ async function handleUpdateGroup(dependencies: Dependencies, req: Request, res: 
   const [updateResult] = await db(TABLE_NAME_GROUP)
     .where('id', id)
     .returning('*')
-    .update(groupUpdates);
+    .update(groupUpdates)
+    .map(camelCaseKeys);
   
-  return makeHandlerResponse({ body: camelCaseKeys(updateResult) });
+  return makeHandlerResponse({ body: { ...updateResult, members: await getGroupMemberList(id) } });
 }
 
 export default curry(handleUpdateGroup);

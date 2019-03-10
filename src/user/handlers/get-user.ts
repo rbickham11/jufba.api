@@ -96,9 +96,16 @@ async function handleGetUser(dependencies: Dependencies, req: Request) : Promise
 
   const [insertResult] = await db(TABLE_NAME_USER)
     .returning('*')
-    .insert(userReq);
+    .insert(userReq)
+    .map(camelCaseKeys);
   
-  return makeHandlerResponse({ body: camelCaseKeys(insertResult) });
+  const response = {
+    ...insertResult,
+    groups: [],
+    players: []
+  };
+
+  return makeHandlerResponse({ body: response });
 }
 
 export default curry(handleGetUser);

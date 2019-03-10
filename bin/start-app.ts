@@ -60,7 +60,7 @@ const handleCreateGroup = HandleCreateGroup({ db });
 const handleDestroyGroup = HandleDestroyGroup({ db, checkIsGroupAdmin });
 const handleGetGroupList = HandleGetGroupList({ db });
 const handleGetGroup = HandleGetGroup({ db, getGroupMemberList });
-const handleUpdateGroup = HandleUpdateGroup({ db, checkIsGroupAdmin });
+const handleUpdateGroup = HandleUpdateGroup({ db, checkIsGroupAdmin, getGroupMemberList });
 const handleUpsertUserToGroup = HandleUpsertUserToGroup({ db, checkIsGroupAdmin });
 const handleRemoveUserFromGroup = HandleRemoveUserFromGroup({ db, checkIsGroupAdmin });
 
