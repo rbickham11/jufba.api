@@ -63,7 +63,7 @@ interface Player {
 
 #### GET /user
 
-Retrieves information on the authenticated user. If called for the first time with a token retrieved by auth0, the user will also be provisioned to the database. Note: In a later version, this provisioing could be updated to happen on any API call.
+Retrieves information for the authenticated user. If called for the first time with a token retrieved by auth0, the user will also be provisioned to the database. Note: In a later version, this provisioing could be updated to happen on any API call or to be an explicit action.
 
 Types: 
 
@@ -99,6 +99,7 @@ Response Body: `Group[]`
 Gets a group with expanded members
 
 Response Body:
+
 ```typescript
 interface GroupResponse extends Group {
   members: Array<{
@@ -113,6 +114,7 @@ interface GroupResponse extends Group {
 Creates a group
 
 Request Body:
+
 ```typescript
 interface GroupCreateRequest {
   name: string;
