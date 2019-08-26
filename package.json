@@ -23,12 +23,12 @@
     "joi": "^14.3.1",
     "jwks-rsa": "^1.4.0",
     "knex": "^0.16.3",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "mime-types": "^2.1.22",
     "morgan": "^1.9.1",
     "pg": "^7.8.2",
     "shortid": "^2.2.14",
-    "ts-node-dev": "^1.0.0-pre.32",
+    "ts-node-dev": "^1.0.0-pre.42",
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
