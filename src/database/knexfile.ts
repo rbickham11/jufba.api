@@ -8,6 +8,8 @@ import {
 } from './config';
 
 
+console.log(DB_HOST);
+
 const connection = {
   host: DB_HOST,
   port: DB_PORT,
