@@ -7,7 +7,6 @@ import {
   DB_MIGRATION_DIRECTORY,
 } from './config';
 
-
 const connection = {
   host: DB_HOST,
   port: DB_PORT,
