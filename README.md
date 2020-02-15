@@ -86,6 +86,23 @@ interface UserResponse extends User {
 }
 ```
 
+### users
+
+#### PUT /users/:id
+
+Updates a user
+
+Request Body
+
+```typescript
+interface UserUpdateRequest {
+  firstName: string;
+  lastName: string;
+}
+```
+
+Response Body: `User`
+
 ### groups
 
 #### GET /groups

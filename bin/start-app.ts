@@ -11,7 +11,8 @@ import makeUsersManager from '../src/auth0/make-users-manager';
 import GetGroupMemberList from '../src/group/get-group-member-list';
 import CheckIsGroupAdmin from '../src/group/check-is-group-admin';
 
-import initializeUserRouter from '../src/user/initialize-router';
+import initializeUserRouter from '../src/user/initialize-user-router';
+import initializeUsersRouter from '../src/user/initialize-users-router';
 import HandleGetUser from '../src/user/handlers/get-user';
 
 import initializeGroupRouter from '../src/group/initialize-router';
@@ -33,6 +34,8 @@ import HandleGetPlayerList from '../src/game/handlers/get-player-list';
 import HandleCreatePlayer from '../src/game/handlers/create-player';
 import HandleUpdatePlayer from '../src/game/handlers/update-player';
 import HandleDestroyPlayer from '../src/game/handlers/destroy-player';
+
+import HandleUpdateUser from '../src/user/handlers/update-user';
 
 
 const app = express();
@@ -74,6 +77,8 @@ const handleCreatePlayer = HandleCreatePlayer({ db });
 const handleUpdatePlayer = HandleUpdatePlayer({ db });
 const handleDestroyPlayer = HandleDestroyPlayer({ db });
 
+const handleUpdateUser = HandleUpdateUser({ db });
+
 const groupHandlers = {
   create: handleCreateGroup,
   destroy: handleDestroyGroup,
@@ -95,11 +100,16 @@ const gameHandlers = {
   createPlayer: handleCreatePlayer,
   updatePlayer: handleUpdatePlayer,
   destroyPlayer: handleDestroyPlayer,
-}
+};
+
+const usersHandlers = {
+  update: handleUpdateUser,
+};
 
 app.use('/games', expandUser, initializeGameRouter(Router(), gameHandlers));
 app.use('/groups', expandUser, initializeGroupRouter(Router(), groupHandlers));
 app.use('/user', initializeUserRouter(Router(), { get: handleGetUser }));
+app.use('/users', expandUser, initializeUsersRouter(Router(), usersHandlers));
 
 // Default error middleware to catch uncaught, non-rejection errors
 app.use((err, req: Request, res: Response, next: NextFunction) => {
