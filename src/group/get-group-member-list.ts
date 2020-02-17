@@ -15,6 +15,7 @@ async function getGroupMemberList(dependencies: Dependencies, groupId: string) :
 
   const result = await db(TABLE_NAME_GROUP_USER)
     .innerJoin(TABLE_NAME_USER, `${TABLE_NAME_GROUP_USER}.user_id`, `${TABLE_NAME_USER}.id`)
+    .where(`${TABLE_NAME_GROUP_USER}.group_id`, groupId)
     .select(
       `${TABLE_NAME_USER}.id as id`,
       `${TABLE_NAME_USER}.first_name as firstName`,
