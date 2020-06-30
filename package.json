@@ -19,7 +19,7 @@
     "cors": "^2.8.5",
     "custom-error-generator": "^7.0.0",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "joi": "^14.3.1",
     "jwks-rsa": "^1.4.0",
     "knex": "^0.19.5",
